@@ -5,7 +5,25 @@ import arrayMove from 'array-move'
 import ReactJson from 'react-json-view'
 import styles from './hard.module.css'
 
-const SortableItem = sortableElement(({ v1, v2, v3 }) => < li className={styles.sortitem} ><img src={ v2 } alt="" height="100"/> <br /> { v1 } <br /> <small> { v3 } </small> < button > - < /button></li > );
+class Button extends Component {
+    constructor(props) {
+        super(props);
+        console.log(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick(uri) {
+        console.log("click! ");
+        console.log(this.props.uri);
+        this.props.removeCallback(this.props.uri);
+    }
+
+    render() {
+        return ( < button onClick={this.handleClick}> REMOVE < /button> )
+    }
+}
+
+const SortableItem = sortableElement(({ v1, v2, v3, removeCallback }) => < li className={styles.sortitem} ><img src={ v2 } alt="" height="100"/> <br /> { v1 } <br /> <small> { v3 } </small> <Button uri= { v3 } removeCallback = { removeCallback } /> </li > );
 
 const SortableContainer = sortableContainer(({ children }) => { return <ul > { children } < /ul>; });
 
@@ -27,21 +45,12 @@ class IcList extends Component {
         return ( <>
             <SortableContainer onSortEnd = { this.onSortEnd } > {
                 items.map((value, index) => ( <
-                    SortableItem key = {
-                        `item-${value}`
-                    }
-                    index = {
-                        index
-                    }
-                    v1  = {
-                        this.props.m[value]
-                    }
-                    v2 = {
-                        this.props.n[value]
-                    }
-                    v3 = {
-                        value
-                    }
+                    SortableItem key = { `item-${value}` }
+                    index = { index }
+                    v1 = { this.props.m[value] }
+                    v2 = { this.props.n[value] }
+                    v3 = { value }
+                    removeCallback = {this.props.removeCallback}
                     />
                 ))
             } </SortableContainer>
@@ -107,11 +116,24 @@ class App extends Component {
       this.setState( { items: childData } )
     }
 
+    callbackRemoveItem = (uri) => {
+        console.log("remove click! "+uri);
+        let ti = this.state.items;
+        ti = ti.filter(function(item) {
+            return item !== uri
+        })
+        this.setState({items:ti});
+    }
+
+    handleClick() {
+        console.log("click!");
+    }
+
     render() {
         return (
             <div className={styles.gridwrap}>
             <div className={styles.gridleft}>
-            <IcList m={this.state.m} n={this.state.n} items={this.state.items} parentCallback = {this.callbackFunction} />
+            <IcList m={this.state.m} n={this.state.n} items={this.state.items} parentCallback={this.callbackFunction} removeCallback={this.callbackRemoveItem} />
             </div>
             <div className={styles.gridright}>
             <IcOut items={this.state.items} />

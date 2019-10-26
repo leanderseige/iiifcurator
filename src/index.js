@@ -88,10 +88,10 @@ class InputManifest extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>
-          URI:
+        <label className={styles.inputlabel}>
+          URI:        </label>
           <input className={styles.textinput} type="text" onChange={this.handleChange} />
-        </label>
+
         <input type="submit" value="Submit" />
       </form>
     );
@@ -106,6 +106,9 @@ class InputCollectionHead extends React.Component {
     this.handleChangeCollectionLabel = this.handleChangeCollectionLabel.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+  componentDidMount() {
+      this.setState( { inputCollectionID: this.props.config.prefix } );
+  }
   handleChangeCollectionID(event) {
       this.setState({inputCollectionID: event.target.value});
     }
@@ -114,19 +117,15 @@ class InputCollectionHead extends React.Component {
   }
 
   handleSubmit(event) {
-      var data = {
-          inputCollectionID: this.state.inputCollectionID,
-          inputCollectionLabel: this.state.inputCollectionLabel
-      };
-      this.props.updateCallback(data);
-    event.preventDefault();
+      this.props.updateCallback({...this.state});
+      event.preventDefault();
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>ID:<input className={styles.textinput} type="text" onChange={this.handleChangeCollectionID} defaultValue={this.props.config.prefix} /></label><br />
-        <label>Label:<input className={styles.textinput} type="text" onChange={this.handleChangeCollectionLabel} /></label>
+        <label className={styles.inputlabel}>ID:</label><input className={styles.textinput} type="text" onChange={this.handleChangeCollectionID} defaultValue={this.props.config.prefix} /><br />
+        <label className={styles.inputlabel}>Label:</label><input className={styles.textinput} type="text" onChange={this.handleChangeCollectionLabel} />
         <input type="submit" value="Submit" />
       </form>
     );

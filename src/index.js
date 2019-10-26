@@ -98,6 +98,42 @@ class InputManifest extends React.Component {
   }
 }
 
+
+class InputCollectionHead extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChangeCollectionID = this.handleChangeCollectionID.bind(this);
+    this.handleChangeCollectionLabel = this.handleChangeCollectionLabel.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChangeCollectionID(event) {
+      this.setState({inputCollectionID: event.target.value});
+    }
+  handleChangeCollectionLabel(event) {
+    this.setState({inputCollectionLabel: event.target.value});
+  }
+
+  handleSubmit(event) {
+      var data = {
+          inputCollectionID: this.state.inputCollectionID,
+          inputCollectionLabel: this.state.inputCollectionLabel
+      };
+      this.props.updateCallback(data);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>ID:<input type="text" onChange={this.handleChangeCollectionID} /></label><br />
+        <label>Label:<input type="text" onChange={this.handleChangeCollectionLabel} /></label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+
 class App extends Component {
 
     state = {
@@ -116,8 +152,8 @@ class App extends Component {
             'https://iiif.manducus.net/manifests/0009/269c6143297887a9733b129577b9f4b5b705f3e3/manifest.json'
         ],
         collectionv2: {
-            '@id': 'https://example.com/collection',
             '@context' : 'http://iiif.io/api/presentation/2/context.json',
+            '@id': 'https://example.com/collection',
             '@type': 'sc:Collection',
             'manifests': []
         },
@@ -179,6 +215,18 @@ class App extends Component {
         return(tc2);
     }
 
+    callbackUpdateCollection = (headData) => {
+        console.log(headData);
+        var tc = {...this.state.collectionv2};
+        tc['@id']=headData.inputCollectionID;
+        tc['label']=headData.inputCollectionLabel;
+        const ordered = {};
+        Object.keys(tc).sort().forEach(function(key) {
+            ordered[key] = tc[key];
+        });
+        this.setState( { collectionv2: ordered });
+    }
+
     callbackRemoveItem = (uri) => {
         console.log("remove click! "+uri);
         var ti = this.state.items;
@@ -211,6 +259,7 @@ class App extends Component {
                     <InputManifest addCallback={this.callbackAddItem} />
                 </div>
                 <div className={styles.headright}>
+                    <InputCollectionHead updateCallback={this.callbackUpdateCollection} />
                 </div>
                 <div className={styles.gridleft}>
                     <IcList m={this.state.m} n={this.state.n} items={this.state.items} swapCallback={this.callbackSwapItems} removeCallback={this.callbackRemoveItem} />

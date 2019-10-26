@@ -39,3 +39,8 @@
     padding: 2vw;
     margin: 1vw 0vw;
 }
+
+ .textinput {
+     display: inline-block;
+     width:30vw;
+ }

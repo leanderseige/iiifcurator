@@ -90,7 +90,7 @@ class InputManifest extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <label>
           URI:
-          <input type="text" onChange={this.handleChange} />
+          <input className={styles.textinput} type="text" onChange={this.handleChange} />
         </label>
         <input type="submit" value="Submit" />
       </form>
@@ -106,7 +106,6 @@ class InputCollectionHead extends React.Component {
     this.handleChangeCollectionLabel = this.handleChangeCollectionLabel.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
   handleChangeCollectionID(event) {
       this.setState({inputCollectionID: event.target.value});
     }
@@ -126,8 +125,8 @@ class InputCollectionHead extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>ID:<input type="text" onChange={this.handleChangeCollectionID} /></label><br />
-        <label>Label:<input type="text" onChange={this.handleChangeCollectionLabel} /></label>
+        <label>ID:<input className={styles.textinput} type="text" onChange={this.handleChangeCollectionID} defaultValue={this.props.config.prefix} /></label><br />
+        <label>Label:<input className={styles.textinput} type="text" onChange={this.handleChangeCollectionLabel} /></label>
         <input type="submit" value="Submit" />
       </form>
     );
@@ -153,7 +152,7 @@ class App extends Component {
         ],
         collectionv2: {
             '@context' : 'http://iiif.io/api/presentation/2/context.json',
-            '@id': 'https://example.com/collection',
+            '@id': '',
             '@type': 'sc:Collection',
             'manifests': []
         },
@@ -174,6 +173,9 @@ class App extends Component {
             this.state.m[uri]="<title>";
             this.state.n[uri]="logo192.png";
         }
+        this.state.collectionv2['@id']=this.props.config['prefix'];
+        this.setState( { config: this.props.config } );
+        this.setState( { inputCollectionID: this.props.config['prefix'] } );
         this.rebuildCollectionV2 = this.rebuildCollectionV2.bind(this);
         this.rebuildCollectionV2(this.state.items);
     }
@@ -259,7 +261,7 @@ class App extends Component {
                     <InputManifest addCallback={this.callbackAddItem} />
                 </div>
                 <div className={styles.headright}>
-                    <InputCollectionHead updateCallback={this.callbackUpdateCollection} />
+                    <InputCollectionHead updateCallback={this.callbackUpdateCollection} config={this.props.config} />
                 </div>
                 <div className={styles.gridleft}>
                     <IcList m={this.state.m} n={this.state.n} items={this.state.items} swapCallback={this.callbackSwapItems} removeCallback={this.callbackRemoveItem} />
@@ -272,4 +274,4 @@ class App extends Component {
     }
 }
 
-render( < App / > , document.getElementById('root'));
+render( < App config = { {'prefix': 'https://iiif.manducus.net/collections/36c3/'} } /> , document.getElementById('root'));

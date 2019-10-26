@@ -14,7 +14,7 @@ class Button extends Component {
 
     handleClick(uri) {
         console.log("click! ");
-        console.log(this.props.uri);
+        console.log("deleting "+this.props.uri);
         this.props.removeCallback(this.props.uri);
     }
 
@@ -23,7 +23,7 @@ class Button extends Component {
     }
 }
 
-const SortableItem = sortableElement(({ v1, v2, v3, removeCallback }) => < li className={styles.sortitem} ><img src={ v2 } alt="" height="100"/> <br /> { v1 } <br /> <small> { v3 } </small> <Button uri= { v3 } removeCallback = { removeCallback } /> </li > );
+const SortableItem = sortableElement(({ title, imgsrc, manifesturi, removeCallback }) => < li className={styles.sortitem} ><img src={ imgsrc } alt="" height="100"/> <br /> { title } <br /> <small> { manifesturi } </small> <Button uri= { manifesturi } removeCallback = { removeCallback } /> </li > );
 
 const SortableContainer = sortableContainer(({ children }) => { return <ul > { children } < /ul>; });
 
@@ -33,8 +33,7 @@ class IcList extends Component {
         oldIndex,
         newIndex
     }) => {
-        this.props.parentCallback( arrayMove(this.props.items, oldIndex, newIndex) );
-        console.log(this.props.items);
+        this.props.swapCallback( arrayMove(this.props.items, oldIndex, newIndex) );
     };
 
     render() {
@@ -47,9 +46,9 @@ class IcList extends Component {
                 items.map((value, index) => ( <
                     SortableItem key = { `item-${value}` }
                     index = { index }
-                    v1 = { this.props.m[value] }
-                    v2 = { this.props.n[value] }
-                    v3 = { value }
+                    title = { this.props.m[value] }
+                    imgsrc = { this.props.n[value] }
+                    manifesturi = { value }
                     removeCallback = {this.props.removeCallback}
                     />
                 ))
@@ -60,11 +59,43 @@ class IcList extends Component {
 }
 
 class IcOut extends Component {
-    render() {
-        return (
-            <ReactJson src = { this.props.items } theme="monokai" />
-        );
+    constructor(props) {
+        super(props);
     }
+    render() {
+        return ( <div><pre>{JSON.stringify(this.props.object, null, 2) }</pre></div> );
+        // return ( <ReactJson src = { this.props.object } theme="monokai" /> );
+    }
+
+}
+
+class InputManifest extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+      this.setState({inputManifest: event.target.value});
+    }
+
+  handleSubmit(event) {
+      this.props.addCallback(this.state.inputManifest);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          URI:
+          <input type="text" onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
 }
 
 class App extends Component {
@@ -84,7 +115,19 @@ class App extends Component {
             'https://iiif.manducus.net/manifests/0009/7dd9cb5e72e1f8bc77eae8c913b9ac22a3ef7cb3/manifest.json',
             'https://iiif.manducus.net/manifests/0009/269c6143297887a9733b129577b9f4b5b705f3e3/manifest.json'
         ],
-        collection: []
+        collectionv2: {
+            '@id': 'https://example.com/collection',
+            '@context' : 'http://iiif.io/api/presentation/2/context.json',
+            '@type': 'sc:Collection',
+            'manifests': []
+        },
+        collectionv3: {
+            '@context' : 'http://iiif.io/api/presentation/3/context.json',
+            'type': "Collection",
+            'items': []
+        }
+
+
     };
 
     constructor(props) {
@@ -92,52 +135,89 @@ class App extends Component {
         this.state.m={};
         this.state.n={};
         for (const uri of this.state.items) {
-            this.state.m[uri]="abc";
+            this.state.m[uri]="<title>";
             this.state.n[uri]="logo192.png";
         }
+        this.rebuildCollectionV2 = this.rebuildCollectionV2.bind(this);
+        this.rebuildCollectionV2(this.state.items);
     }
 
     componentDidMount() {
         for (const uri of this.state.items) {
-            fetch(uri)
-                .then(res => res.json())
-                .then((data) => {
-                    let tm = this.state.m;
-                    let tn = this.state.n;
-                    tm[uri] = data.label;
-                    tn[uri] = data['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['@id']+"/full/200,/0/default.jpg";
-                    this.setState({m:tm,n:tn});
-                })
-                .catch(console.log);
+            this.enrich_view(uri);
         }
     }
 
-    callbackFunction = (childData) => {
-      this.setState( { items: childData } )
+    enrich_view(uri) {
+        fetch(uri)
+            .then(res => res.json())
+            .then((data) => {
+                let tm = this.state.m;
+                let tn = this.state.n;
+                tm[uri] = data.label;
+                tn[uri] = data['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['@id']+"/full/200,/0/default.jpg";
+                this.setState({m:tm,n:tn});
+            })
+            .catch(console.log);
+    }
+
+    callbackSwapItems = (childData) => {
+        this.rebuildCollectionV2(childData);
+      this.setState( { items: childData } );
+    }
+
+    rebuildCollectionV2(ti) {
+        console.log("rebuildCollectionV2");
+        var tc2 = this.state.collectionv2;
+        tc2['manifests'] = []
+        for(const key in ti) {
+            let tm = {};
+            tm['@id']=ti[key];
+            tm['@type']='sc:Manifest';
+            tc2['manifests'].push(tm);
+        }
+        return(tc2);
     }
 
     callbackRemoveItem = (uri) => {
         console.log("remove click! "+uri);
-        let ti = this.state.items;
+        var ti = this.state.items;
         ti = ti.filter(function(item) {
             return item !== uri
         })
-        this.setState({items:ti});
+        var tc2 = this.rebuildCollectionV2(ti);
+        console.log("NEW:");
+        console.log(ti);
+        console.log(tc2);
+        this.setState( { items: ti, collectionv2: tc2 } );
     }
 
-    handleClick() {
-        console.log("click!");
+    callbackAddItem = (uri) => {
+        if(this.state.items.includes(uri)) {
+            alert("already there");
+            return;
+        }
+        var ti = this.state.items;
+        ti.unshift(uri);
+        this.setState( { items: ti}  );
+        this.enrich_view(uri);
+        this.rebuildCollectionV2(ti);
     }
 
     render() {
         return (
             <div className={styles.gridwrap}>
-            <div className={styles.gridleft}>
-            <IcList m={this.state.m} n={this.state.n} items={this.state.items} parentCallback={this.callbackFunction} removeCallback={this.callbackRemoveItem} />
-            </div>
-            <div className={styles.gridright}>
-            <IcOut items={this.state.items} />
-            </div>
+                <div className={styles.headleft}>
+                    <InputManifest addCallback={this.callbackAddItem} />
+                </div>
+                <div className={styles.headright}>
+                </div>
+                <div className={styles.gridleft}>
+                    <IcList m={this.state.m} n={this.state.n} items={this.state.items} swapCallback={this.callbackSwapItems} removeCallback={this.callbackRemoveItem} />
+                </div>
+                <div className={styles.gridright}>
+                    <IcOut object={this.state.collectionv2} />
+                </div>
             </div>
         );
     }

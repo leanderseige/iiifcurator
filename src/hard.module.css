@@ -1,13 +1,31 @@
 .gridwrap {
   display: grid;
   grid-template-columns: 50vw 50vw;
-  grid-template-rows: 100vh;
+  grid-template-rows: 10vh 90vh;
   font-family: Arial, sans-serif;
+}
+
+.headleft {
+    grid-column: 1;
+    grid-row: 1;
+    overflow: scroll;
+}
+
+.headright {
+    grid-column: 2;
+    grid-row: 1;
+    overflow: scroll;
 }
 
 .gridleft {
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 2;
+    overflow: scroll;
+}
+
+.gridright {
+    grid-column: 2;
+    grid-row: 2;
     overflow: scroll;
 }
 
@@ -20,10 +38,4 @@
     background-color: #eee;
     padding: 2vw;
     margin: 1vw 0vw;
-}
-
-.gridright {
-    grid-column: 2;
-    grid-row: 1;
-    overflow: scroll;
 }

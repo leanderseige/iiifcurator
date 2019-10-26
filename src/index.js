@@ -4,6 +4,9 @@ import { sortableContainer, sortableElement } from 'react-sortable-hoc'
 import arrayMove from 'array-move'
 import ReactJson from 'react-json-view'
 import styles from './hard.module.css'
+import InputManifest from './componentInputManifest.js'
+import InputCollection from './componentInputCollection.js'
+import InputCollectionHead from './componentInputCollectionHead.js'
 
 class Button extends Component {
     constructor(props) {
@@ -67,69 +70,6 @@ class IcOut extends Component {
         // return ( <ReactJson src = { this.props.object } theme="monokai" /> );
     }
 
-}
-
-class InputManifest extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-      this.setState({inputManifest: event.target.value});
-    }
-
-  handleSubmit(event) {
-      this.props.addCallback(this.state.inputManifest);
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label className={styles.inputlabel}>
-          URI:        </label>
-          <input className={styles.textinput} type="text" onChange={this.handleChange} />
-
-        <input type="submit" value="Submit" />
-      </form>
-    );
-  }
-}
-
-
-class InputCollectionHead extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChangeCollectionID = this.handleChangeCollectionID.bind(this);
-    this.handleChangeCollectionLabel = this.handleChangeCollectionLabel.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  componentDidMount() {
-      this.setState( { inputCollectionID: this.props.config.prefix } );
-  }
-  handleChangeCollectionID(event) {
-      this.setState({inputCollectionID: event.target.value});
-    }
-  handleChangeCollectionLabel(event) {
-    this.setState({inputCollectionLabel: event.target.value});
-  }
-
-  handleSubmit(event) {
-      this.props.updateCallback({...this.state});
-      event.preventDefault();
-  }
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label className={styles.inputlabel}>ID:</label><input className={styles.textinput} type="text" onChange={this.handleChangeCollectionID} defaultValue={this.props.config.prefix} /><br />
-        <label className={styles.inputlabel}>Label:</label><input className={styles.textinput} type="text" onChange={this.handleChangeCollectionLabel} />
-        <input type="submit" value="Submit" />
-      </form>
-    );
-  }
 }
 
 class App extends Component {
@@ -253,10 +193,26 @@ class App extends Component {
         this.rebuildCollectionV2(ti);
     }
 
+    callbackLoadCollection = (uri) => {
+        fetch(uri)
+            .then(res => res.json())
+            .then((data) => {
+                var items = [];
+                for(const m of data['manifests']) {
+                    items.push(m['@id']);
+                    this.enrich_view(m['@id']);
+                }
+                this.setState( { items: items } );
+                this.rebuildCollectionV2(items);
+            })
+            .catch(console.log);
+    }
+
     render() {
         return (
             <div className={styles.gridwrap}>
                 <div className={styles.headleft}>
+                    <InputCollection loadCallback={this.callbackLoadCollection} />
                     <InputManifest addCallback={this.callbackAddItem} />
                 </div>
                 <div className={styles.headright}>

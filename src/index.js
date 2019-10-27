@@ -3,6 +3,7 @@ import { render } from 'react-dom'
 import { sortableContainer, sortableElement } from 'react-sortable-hoc'
 import arrayMove from 'array-move'
 import ReactJson from 'react-json-view'
+import {CopyToClipboard} from 'react-copy-to-clipboard'
 import styles from './hard.module.css'
 import InputManifest from './componentInputManifest.js'
 import InputCollection from './componentInputCollection.js'
@@ -66,7 +67,7 @@ class IcOut extends Component {
         super(props);
     }
     render() {
-        return ( <div><pre>{JSON.stringify(this.props.object, null, 2) }</pre></div> );
+        return ( <div><pre>{ this.props.collectionv2_json }</pre></div> );
         // return ( <ReactJson src = { this.props.object } theme="monokai" /> );
     }
 
@@ -89,6 +90,7 @@ class App extends Component {
             'https://iiif.manducus.net/manifests/0009/7dd9cb5e72e1f8bc77eae8c913b9ac22a3ef7cb3/manifest.json',
             'https://iiif.manducus.net/manifests/0009/269c6143297887a9733b129577b9f4b5b705f3e3/manifest.json'
         ],
+        collectionv2_json: '',
         collectionv2: {
             '@context' : 'http://iiif.io/api/presentation/2/context.json',
             '@id': '',
@@ -99,8 +101,8 @@ class App extends Component {
             '@context' : 'http://iiif.io/api/presentation/3/context.json',
             'type': "Collection",
             'items': []
-        }
-
+        },
+        collectionv3_json: '',
 
     };
 
@@ -123,6 +125,7 @@ class App extends Component {
         for (const uri of this.state.items) {
             this.enrich_view(uri);
         }
+        this.rebuildCollectionV2(this.state.items);
     }
 
     enrich_view(uri) {
@@ -153,6 +156,8 @@ class App extends Component {
             tm['@type']='sc:Manifest';
             tc2['manifests'].push(tm);
         }
+        var tc2_json = JSON.stringify(tc2, null, 2);
+        this.setState( { collectionv2_json: tc2_json, collectionv2: tc2 } );
         return(tc2);
     }
 
@@ -174,11 +179,11 @@ class App extends Component {
         ti = ti.filter(function(item) {
             return item !== uri
         })
-        var tc2 = this.rebuildCollectionV2(ti);
-        console.log("NEW:");
-        console.log(ti);
-        console.log(tc2);
-        this.setState( { items: ti, collectionv2: tc2 } );
+        // var tc2 = this.rebuildCollectionV2(ti);
+        // console.log("NEW:");
+        // console.log(ti);
+        // console.log(tc2);
+        this.setState( { items: ti } );
     }
 
     callbackAddItem = (uri) => {
@@ -222,11 +227,15 @@ class App extends Component {
                     <IcList m={this.state.m} n={this.state.n} items={this.state.items} swapCallback={this.callbackSwapItems} removeCallback={this.callbackRemoveItem} />
                 </div>
                 <div className={styles.gridright}>
-                    <IcOut object={this.state.collectionv2} />
+                    <IcOut collectionv2_json={this.state.collectionv2_json} />
+                    <CopyToClipboard text={this.state.collectionv2_json}
+                      onCopy={() => this.setState({copied: true})}>
+                      <button>Copy to clipboard with button</button>
+                    </CopyToClipboard>
                 </div>
             </div>
         );
     }
 }
 
-render( < App config = { {'prefix': 'https://iiif.manducus.net/collections/36c3/'} } /> , document.getElementById('root'));
+render( < App config = { {'prefix': 'https://iiif.manducus.net/collections/36c3/manifest.json'} } /> , document.getElementById('root'));

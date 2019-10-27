@@ -28,7 +28,7 @@ class InputCollectionHead extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <label className={styles.inputlabel}>ID:</label><input className={styles.textinput} type="text" onChange={this.handleChangeCollectionID} defaultValue={this.props.config.prefix} /><br />
         <label className={styles.inputlabel}>Label:</label><input className={styles.textinput} type="text" onChange={this.handleChangeCollectionLabel} />
-        <input type="submit" value="Submit" />
+        <input type="submit" value="SET" />
       </form>
     );
   }

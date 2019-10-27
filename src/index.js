@@ -4,10 +4,12 @@ import { sortableContainer, sortableElement } from 'react-sortable-hoc'
 import arrayMove from 'array-move'
 import ReactJson from 'react-json-view'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
+import JSONPretty from 'react-json-pretty';
+import 'react-json-pretty/themes/monikai.css';
 import styles from './hard.module.css'
-import InputManifest from './componentInputManifest.js'
-import InputCollection from './componentInputCollection.js'
-import InputCollectionHead from './componentInputCollectionHead.js'
+import InputManifest from './components_InputManifest.js'
+import InputCollection from './components_InputCollection.js'
+import InputCollectionHead from './components_InputCollectionHead.js'
 
 class Button extends Component {
     constructor(props) {
@@ -67,8 +69,9 @@ class IcOut extends Component {
         super(props);
     }
     render() {
-        return ( <div><pre>{ this.props.collectionv2_json }</pre></div> );
-        // return ( <ReactJson src = { this.props.object } theme="monokai" /> );
+        // return ( <div><pre>{ this.props.collectionv2_json }</pre></div> );
+        return ( <JSONPretty id="json-pretty" data={this.props.collectionv2_json}></JSONPretty> );
+        // return ( <ReactJson src = { this.props.collectionv2_json } theme="monokai" /> );
     }
 
 }

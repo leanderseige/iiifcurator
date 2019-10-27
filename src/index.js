@@ -148,7 +148,7 @@ class App extends Component {
 
     rebuildCollectionV2(ti) {
         console.log("rebuildCollectionV2");
-        var tc2 = this.state.collectionv2;
+        var tc2 = {...this.state.collectionv2};
         tc2['manifests'] = []
         for(const key in ti) {
             let tm = {};
@@ -163,14 +163,15 @@ class App extends Component {
 
     callbackUpdateCollection = (headData) => {
         console.log(headData);
-        var tc = {...this.state.collectionv2};
-        tc['@id']=headData.inputCollectionID;
-        tc['label']=headData.inputCollectionLabel;
+        var tc2 = {...this.state.collectionv2};
+        tc2['@id']=headData.inputCollectionID;
+        tc2['label']=headData.inputCollectionLabel;
         const ordered = {};
-        Object.keys(tc).sort().forEach(function(key) {
-            ordered[key] = tc[key];
+        Object.keys(tc2).sort().forEach(function(key) {
+            ordered[key] = tc2[key];
         });
-        this.setState( { collectionv2: ordered });
+        var tc2_json = JSON.stringify(tc2, null, 2);
+        this.setState( { collectionv2_json: tc2_json, collectionv2: ordered } );
     }
 
     callbackRemoveItem = (uri) => {
@@ -179,11 +180,11 @@ class App extends Component {
         ti = ti.filter(function(item) {
             return item !== uri
         })
-        // var tc2 = this.rebuildCollectionV2(ti);
+        var tc2 = this.rebuildCollectionV2(ti);
         // console.log("NEW:");
         // console.log(ti);
         // console.log(tc2);
-        this.setState( { items: ti } );
+        this.setState( { items: ti, collectionv2: tc2 } );
     }
 
     callbackAddItem = (uri) => {

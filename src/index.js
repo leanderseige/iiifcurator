@@ -222,16 +222,16 @@ class App extends Component {
                 </div>
                 <div className={styles.headright}>
                     <InputCollectionHead updateCallback={this.callbackUpdateCollection} config={this.props.config} />
+                    <CopyToClipboard text={this.state.collectionv2_json}
+                      onCopy={() => this.setState({copied: true})}>
+                      <button>COPY</button>
+                    </CopyToClipboard>
                 </div>
                 <div className={styles.gridleft}>
                     <IcList m={this.state.m} n={this.state.n} items={this.state.items} swapCallback={this.callbackSwapItems} removeCallback={this.callbackRemoveItem} />
                 </div>
                 <div className={styles.gridright}>
                     <IcOut collectionv2_json={this.state.collectionv2_json} />
-                    <CopyToClipboard text={this.state.collectionv2_json}
-                      onCopy={() => this.setState({copied: true})}>
-                      <button>Copy to clipboard with button</button>
-                    </CopyToClipboard>
                 </div>
             </div>
         );

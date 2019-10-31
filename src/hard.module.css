@@ -4,6 +4,7 @@
   grid-template-rows: 10vh 90vh;
   font-family: Arial, sans-serif;
   font-size: 1.2vw;
+  padding: 0 0 0 1vw;
 }
 
 .headleft {
@@ -52,4 +53,11 @@
      white-space : nowrap;
      width:8vw;
      clear: none;
+ }
+
+ .jsonout {
+     display: block;
+     max-width: 46vw;
+     max-height: 86vh;
+     overflow: scroll;
  }

@@ -17,6 +17,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         const state = store.getState();
+        // const state = this.props.state;
         this.callbackLoadCollection('https://iiif.manducus.net/collections/random/autumn.json');
         this.rebuildCollectionV2 = this.rebuildCollectionV2.bind(this);
         this.rebuildCollectionV2(state.items);
@@ -39,14 +40,14 @@ class App extends Component {
                     label: data.label,
                     thumb: data['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['@id']+'/full/200,/0/default.jpg'
                 });
-                this.forceUpdate(); // FIXME
+                // this.forceUpdate(); // FIXME
             })
             .catch(console.log);
     }
 
     callbackSwapItems = (childData) => {
         this.rebuildCollectionV2(childData);
-        this.forceUpdate(); // FIXME
+        // this.forceUpdate(); // FIXME
     }
 
     rebuildCollectionV2(tempitems) {
@@ -72,7 +73,7 @@ class App extends Component {
         const state = store.getState();
         var tempitems = state.items;
         this.rebuildCollectionV2(tempitems);
-        this.forceUpdate();
+        // this.forceUpdate();
     }
 
     callbackAddItem = (uri) => {
@@ -98,7 +99,7 @@ class App extends Component {
         var tempv2json = JSON.stringify(tempv2, null, 2);
         store.dispatch({type:'SET_IIIFJSON',v2json: tempv2json});
         store.dispatch({type:'SET_IIIF',v2: ordered});
-        this.forceUpdate();
+        // this.forceUpdate();
     }
 
     callbackLoadCollection = (uri) => {
@@ -125,7 +126,7 @@ class App extends Component {
 
                 this.callbackUpdateCollection();
                 this.rebuildCollectionV2(items);
-                this.forceUpdate(); // FIXME
+                // this.forceUpdate(); // FIXME
             })
             .catch(console.log);
     }
@@ -155,10 +156,10 @@ class App extends Component {
     }
 }
 
-// function mapStateToProps(state) {
-//   return { state: state }
-// }
+function mapStateToProps(state) {
+  return { state: state }
+}
 //
-// export default connect(mapStateToProps)(App)
-
-export default App
+export default connect(mapStateToProps)(App)
+// export default connect()(App)
+// export default App

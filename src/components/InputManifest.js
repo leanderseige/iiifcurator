@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styles from '../hard.module.css'
 import store from '../store';
 
@@ -26,4 +27,5 @@ class InputManifest extends React.Component {
   }
 }
 
-export default InputManifest;
+// export default InputManifest;
+export default connect()(InputManifest)

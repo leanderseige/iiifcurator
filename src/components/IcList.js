@@ -24,6 +24,7 @@ class IcList extends Component {
         newIndex
     }) => {
         const state = store.getState();
+        // const state = this.props.state;
         var neu = arrayMove(state.items, oldIndex, newIndex);
         this.props.swapCallback( neu );
         store.dispatch({type: 'SET_ITEMS', items: neu});
@@ -36,9 +37,10 @@ class IcList extends Component {
 
     render() {
         const state = store.getState();
-        // const state = this.props.dingdong;
+        // const state = this.props.state;
         // console.log("dingdong")
         // console.log(state)
+        // console.log(state.items)
         // console.log(state.items.length)
         if(state && state.items && state.items.length>0) {
             return ( <>
@@ -50,6 +52,7 @@ class IcList extends Component {
                         imgsrc = { state.thumbs[uri] }
                         manifesturi = { uri }
                         removeCallback = {this.props.removeCallback}
+                        state = { state }
                         />
                     ))
                 } </SortableContainer>
@@ -61,10 +64,11 @@ class IcList extends Component {
     }
 }
 
-// function mapStateToProps(state) {
-//   return { dingdong: state }
-// }
-//
-// export default connect(mapStateToProps)(IcList)
+function mapStateToProps(state) {
+  return { state: state }
+}
 
-export default IcList
+export default connect(mapStateToProps)(IcList)
+
+// export default connect()(IcList)
+// export default IcList

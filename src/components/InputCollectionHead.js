@@ -1,7 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styles from '../hard.module.css'
 import store from '../store';
-
 
 class InputCollectionHead extends React.Component {
   constructor(props) {
@@ -42,4 +42,5 @@ class InputCollectionHead extends React.Component {
   }
 }
 
-export default InputCollectionHead;
+// export default InputCollectionHead;
+export default connect()(InputCollectionHead)

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import store from '../store';
 
 class RemoveButton extends Component {
@@ -20,4 +21,4 @@ class RemoveButton extends Component {
     }
 }
 
-export default RemoveButton;
+export default connect()(RemoveButton)

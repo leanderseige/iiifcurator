@@ -1,14 +1,15 @@
-import { createStore } from 'redux';
-
+import { createStore, compose } from 'redux';
 
 function reducer(state, action) {
-    console.log(action);
+    // console.log(action);
     switch(action.type) {
         case 'ADD_MANIFEST' : {
             var tempitems = state.items;
             tempitems.unshift(action.uri);
             state.items = tempitems;
-            return state;
+            return Object.assign({}, state, {
+                items: tempitems
+            })
         }
         case 'REMOVE_MANIFEST' : {
             var tempitems = state.items;
@@ -19,16 +20,20 @@ function reducer(state, action) {
             return state;
         }
         case 'LOAD_COLLECTION' : {
+            var temp = {}
             for (var key in action.state) {
                 if(key !== 'type') {
-                    state[key] = action.state[key];
+                    temp[key] = action.state[key];
                 }
             }
-            return state;
+            return Object.assign({}, state, temp)
         }
         case 'SET_IIIFJSON' : {
-            state.v2json = action.v2json;
-            return state;
+            return Object.assign({}, state, {
+                v2json: action.v2json
+            })
+            // state.v2json = action.v2json;
+            // return state;
         }
         case 'SET_IIIF' : {
             state.v2 = action.v2;
@@ -48,7 +53,8 @@ function reducer(state, action) {
         case 'ENRICH_VIEW' : {
             state.labels[action.uri]=action.label;
             state.thumbs[action.uri]=action.thumb;
-            return state;
+            return Object.assign({}, state, action)
+            // return state;
         }
         default : {
             return state;
@@ -76,6 +82,10 @@ const initial_state = {
     v3json: '',
 }
 
-const store = createStore(reducer, initial_state);
+const enhancers = compose(
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+
+const store = createStore(reducer, initial_state, enhancers);
 
 export default store;

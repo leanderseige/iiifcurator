@@ -8,7 +8,7 @@ This is a small tool to manually create and currate small collections according 
 
 Check out the source code and change into the directory:
 
-### ```
+```
 git clone 'https://github.com/leanderseige/iiifcurator'
 cd iiifcurator
 ```

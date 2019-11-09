@@ -4,6 +4,24 @@ This is a small tool to manually create and currate small collections according 
 
 ![iiifcurator screenshot](screenshot.png)
 
+## Usage
+
+check out the source code and change into the directory:
+```
+git clone 'https://github.com/leanderseige/iiifcurator'
+cd iiifcurator
+```
+
+install dependencies
+```
+npm install
+```
+
+run local webserer
+```
+npm start
+```
+
 ## This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 In the project directory, you can run:

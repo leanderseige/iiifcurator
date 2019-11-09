@@ -1,29 +1,28 @@
-import { createStore, compose } from 'redux';
+import { createStore, compose } from 'redux'
 
 function reducer(state, action) {
-    // console.log(action);
     switch(action.type) {
         case 'ADD_MANIFEST' : {
-            var tempitems = state.items;
-            tempitems.unshift(action.uri);
-            state.items = tempitems;
+            var tempitems = state.items
+            tempitems.unshift(action.uri)
             return Object.assign({}, state, {
                 items: tempitems
             })
         }
         case 'REMOVE_MANIFEST' : {
-            var tempitems = state.items;
+            var tempitems = state.items
             tempitems = tempitems.filter(function(item) {
                 return item !== action.uri
             })
-            state.items = tempitems;
-            return state;
+            return Object.assign({}, state, {
+                items: tempitems
+            })
         }
         case 'LOAD_COLLECTION' : {
             var temp = {}
-            for (var key in action.state) {
+            for (var key in action.data) {
                 if(key !== 'type') {
-                    temp[key] = action.state[key];
+                    temp[key] = action.data[key]
                 }
             }
             return Object.assign({}, state, temp)
@@ -32,32 +31,36 @@ function reducer(state, action) {
             return Object.assign({}, state, {
                 v2json: action.v2json
             })
-            // state.v2json = action.v2json;
-            // return state;
         }
         case 'SET_IIIF' : {
-            state.v2 = action.v2;
-            return state;
+            return Object.assign({}, state, {
+                v2: action.v2
+            })
         }
         case 'SET_ITEMS' : {
-            state.items = action.items;
-            return state;
+            return Object.assign({}, state, {
+                items: action.items
+            })
         }
         case 'SET_HEAD': {
-            state.uri = action.uri;
-            state.label = action.label;
-            state.v2['@id'] = action.uri;
-            state.v2['label'] = action.label;
-            return state;
+            var temp = {}
+            temp.v2 = Object.assign({}, state.v2)
+            temp.uri = action.uri
+            temp.label = action.label
+            temp.v2['@id'] = action.uri
+            temp.v2['label'] = action.label
+            return Object.assign({}, state, temp)
         }
         case 'ENRICH_VIEW' : {
-            state.labels[action.uri]=action.label;
-            state.thumbs[action.uri]=action.thumb;
-            return Object.assign({}, state, action)
-            // return state;
+            var temp = {}
+            temp.labels = Object.assign({},state.labels)
+            temp.thumbs = Object.assign({},state.thumbs)
+            temp.labels[action.uri]=action.label
+            temp.thumbs[action.uri]=action.thumb
+            return Object.assign({}, state, temp)
         }
         default : {
-            return state;
+            return state
         }
     }
 }
@@ -66,7 +69,6 @@ const initial_state = {
     items: [],
     thumbs: [],
     labels: [],
-    label: '<initial label>',
     v2json: '',
     v2: {
         '@context' : 'http://iiif.io/api/presentation/2/context.json',
@@ -84,8 +86,8 @@ const initial_state = {
 
 const enhancers = compose(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+)
 
-const store = createStore(reducer, initial_state, enhancers);
+const store = createStore(reducer, initial_state, enhancers)
 
-export default store;
+export default store

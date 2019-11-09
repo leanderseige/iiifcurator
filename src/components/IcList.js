@@ -37,11 +37,6 @@ class IcList extends Component {
 
     render() {
         const state = store.getState();
-        // const state = this.props.state;
-        // console.log("dingdong")
-        // console.log(state)
-        // console.log(state.items)
-        // console.log(state.items.length)
         if(state && state.items && state.items.length>0) {
             return ( <>
                 <SortableContainer onSortEnd = { this.onSortEnd } > {
@@ -69,6 +64,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(IcList)
-
-// export default connect()(IcList)
-// export default IcList

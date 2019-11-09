@@ -27,5 +27,4 @@ class InputCollection extends React.Component {
     }
 }
 
-// export default InputCollection;
 export default connect()(InputCollection)

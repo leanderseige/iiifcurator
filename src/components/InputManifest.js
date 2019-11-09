@@ -27,5 +27,4 @@ class InputManifest extends React.Component {
   }
 }
 
-// export default InputManifest;
 export default connect()(InputManifest)

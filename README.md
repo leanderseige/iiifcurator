@@ -2,6 +2,8 @@
 
 This is a small tool to manually create and currate small collections according to the IIIF Presentation API.
 
+![iiifcurator screenshot](screenshot-2019-09-08.png)
+
 ## This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 In the project directory, you can run:

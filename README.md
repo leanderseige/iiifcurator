@@ -4,6 +4,10 @@ This is a small tool to manually create and currate small collections according 
 
 ![iiifcurator screenshot](screenshot.png)
 
+## Disclaimer
+
+This is my first project with React and Redux, so for sure it is far from being exemplary for great Javascript development.
+
 ## Usage
 
 Check out the source code and change into the directory:

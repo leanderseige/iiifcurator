@@ -6,25 +6,20 @@ This is a small tool to manually create and currate small collections according 
 
 ## Usage
 
-check out the source code and change into the directory:
-```
+Check out the source code and change into the directory:
+
+### ```
 git clone 'https://github.com/leanderseige/iiifcurator'
 cd iiifcurator
 ```
 
-install dependencies
-```
-npm install
-```
+#### This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-run local webserer
-```
-npm start
-```
+Install dependencies
 
-## This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### `npm install`
 
-In the project directory, you can run:
+Launch application
 
 ### `npm start`
 

@@ -6,7 +6,7 @@ This is a small tool to manually create and currate small collections according 
 
 ## Disclaimer
 
-This is my first project with React and Redux, so for sure it is far from being exemplary for great Javascript development.
+This is my first project with React and Redux, so for sure it is far from being exemplary for great Javascript coding.
 
 ## Usage
 

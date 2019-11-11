@@ -2,6 +2,8 @@
 
 This is a small tool to manually create and curate small collections according to the IIIF Presentation API.
 
+See it in action: https://manducus.net/iiifcurator/
+
 ![iiifcurator screenshot](screenshot.png)
 
 ## Disclaimer

@@ -1,6 +1,7 @@
 {
   "name": "iiifcurator",
   "version": "0.1.0",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "array-move": "^2.2.0",

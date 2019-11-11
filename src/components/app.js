@@ -10,7 +10,6 @@ import JsonOut from './JsonOut.js'
 import ItemList from './ItemList.js'
 import store from '../store'
 
-
 class App extends Component {
 
     constructor(props) {
@@ -130,7 +129,7 @@ class App extends Component {
     }
 
     render() {
-        const state = store.getState()
+        // const state = store.getState()
         return (
             <div className={styles.gridwrap}>
                 <div className={styles.headleft}>
@@ -148,7 +147,7 @@ class App extends Component {
                 </div>
                 <div className={styles.headright}>
                     <InputCollectionHead updateCallback={this.callbackUpdateCollection} />
-                    <CopyToClipboard text={state.v2json}>
+                    <CopyToClipboard text={this.props.v2json}>
                       <button>COPY</button>
                     </CopyToClipboard>
                 </div>
@@ -157,10 +156,21 @@ class App extends Component {
                 </div>
                 <div className={styles.gridright}>
                     <JsonOut />
+                    <p>
+                        <a href="https://github.com/leanderseige/iiifcurator" target="_blank">
+                        This code is on github!
+                        </a>
+                    </p>
                 </div>
             </div>
         )
     }
 }
 
-export default connect()(App)
+function mapStateToProps(state, ownProps) {
+    return {
+        v2json: state.v2json
+    };
+}
+
+export default connect(mapStateToProps)(App)

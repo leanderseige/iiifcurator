@@ -25,7 +25,7 @@ class IcList extends Component {
     }) => {
         const state = store.getState();
         // const state = this.props.state;
-        var neu = arrayMove(state.items, oldIndex, newIndex);
+        var neu = arrayMove(this.props.items, oldIndex, newIndex);
         this.props.swapCallback( neu );
         store.dispatch({type: 'SET_ITEMS', items: neu});
         this.forceUpdate();
@@ -36,18 +36,16 @@ class IcList extends Component {
     }
 
     render() {
-        const state = store.getState();
-        if(state && state.items && state.items.length>0) {
+        if(this.props.items && this.props.items.length>0) {
             return ( <>
                 <SortableContainer onSortEnd = { this.onSortEnd } > {
-                    state.items.map((uri, index) => ( <
+                    this.props.items.map((uri, index) => ( <
                         SortableItem key = { `item-${uri}` }
                         index = { index }
-                        title = { state.labels[uri] }
-                        imgsrc = { state.thumbs[uri] }
+                        title = { this.props.labels[uri] }
+                        imgsrc = { this.props.thumbs[uri] }
                         manifesturi = { uri }
                         removeCallback = {this.props.removeCallback}
-                        state = { state }
                         />
                     ))
                 } </SortableContainer>
@@ -60,7 +58,11 @@ class IcList extends Component {
 }
 
 function mapStateToProps(state) {
-  return { state: state }
+    return {
+        items: state.items,
+        labels: state.labels,
+        thumbs: state.thumbs
+    }
 }
 
 export default connect(mapStateToProps)(IcList)

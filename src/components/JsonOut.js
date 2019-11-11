@@ -3,12 +3,8 @@ import { connect } from 'react-redux';
 import JSONPretty from 'react-json-pretty';
 import 'react-json-pretty/themes/monikai.css';
 import styles from '../hard.module.css';
-import store from '../store';
 
 class JsonOut extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         return (
             <div className={styles.jsonout}>

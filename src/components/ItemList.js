@@ -29,10 +29,6 @@ class ItemList extends Component {
         this.forceUpdate();
     };
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         if(this.props.items && this.props.items.length>0) {
             return ( <>

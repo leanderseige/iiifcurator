@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 import { connect } from 'react-redux'
-import ReactJson from 'react-json-view'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import styles from '../hard.module.css'
 import InputManifest from './InputManifest.js'
@@ -112,6 +111,10 @@ class App extends Component {
                     this.enrich_view(m['@id'])
                     labels[m['@id']]="<title>"
                     thumbs[m['@id']]="logo192.png"
+                    if(items.length>100) {
+                        alert("stopping at 100 items")
+                        break
+                    }
                 }
                 store.dispatch({type: 'LOAD_COLLECTION',data: {
                     label: data['label'],

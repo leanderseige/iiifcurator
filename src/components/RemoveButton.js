@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import store from '../store';
 
 class RemoveButton extends Component {
     constructor(props) {

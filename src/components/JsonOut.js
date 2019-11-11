@@ -5,7 +5,7 @@ import 'react-json-pretty/themes/monikai.css';
 import styles from '../hard.module.css';
 import store from '../store';
 
-class IcOut extends Component {
+class JsonOut extends Component {
     constructor(props) {
         super(props);
     }
@@ -24,4 +24,4 @@ function mapStateToProps(state, ownProps) {
     };
 }
 
-export default connect(mapStateToProps)(IcOut)
+export default connect(mapStateToProps)(JsonOut)

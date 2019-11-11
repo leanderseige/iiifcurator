@@ -17,7 +17,7 @@ const SortableItem = sortableElement(({ title, imgsrc, manifesturi, removeCallba
 
 const SortableContainer = sortableContainer(({ children }) => { return <ul > { children } < /ul>; });
 
-class IcList extends Component {
+class ItemList extends Component {
 
     onSortEnd = ({
         oldIndex,
@@ -65,4 +65,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(IcList)
+export default connect(mapStateToProps)(ItemList)

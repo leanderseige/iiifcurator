@@ -7,8 +7,8 @@ import styles from '../hard.module.css'
 import InputManifest from './InputManifest.js'
 import InputCollectionHead from './InputCollectionHead.js'
 import InputCollection from './InputCollection.js'
-import IcList from './IcList.js'
-import IcOut from './IcOut.js'
+import JsonOut from './JsonOut.js'
+import ItemList from './ItemList.js'
 import store from '../store'
 
 
@@ -141,18 +141,14 @@ class App extends Component {
                     </CopyToClipboard>
                 </div>
                 <div className={styles.gridleft}>
-                    <IcList swapCallback={this.callbackSwapItems} removeCallback={this.callbackRemoveItem} />
+                    <ItemList swapCallback={this.callbackSwapItems} removeCallback={this.callbackRemoveItem} />
                 </div>
                 <div className={styles.gridright}>
-                    <IcOut />
+                    <JsonOut />
                 </div>
             </div>
         )
     }
 }
 
-function mapStateToProps(state) {
-  return { state: state }
-}
-
-export default connect(mapStateToProps)(App)
+export default connect()(App)

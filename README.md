@@ -1,6 +1,6 @@
 # iiifcurator
 
-This is a small tool to manually create and currate small collections according to the IIIF Presentation API.
+This is a small tool to manually create and curate small collections according to the IIIF Presentation API.
 
 ![iiifcurator screenshot](screenshot.png)
 

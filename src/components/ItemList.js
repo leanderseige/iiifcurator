@@ -23,8 +23,6 @@ class ItemList extends Component {
         oldIndex,
         newIndex
     }) => {
-        const state = store.getState();
-        // const state = this.props.state;
         var neu = arrayMove(this.props.items, oldIndex, newIndex);
         this.props.swapCallback( neu );
         store.dispatch({type: 'SET_ITEMS', items: neu});

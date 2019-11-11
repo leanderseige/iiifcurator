@@ -131,6 +131,15 @@ class App extends Component {
         return (
             <div className={styles.gridwrap}>
                 <div className={styles.headleft}>
+                    <button onClick={(e) => this.callbackLoadCollection('https://iiif.manducus.net/collections/random/empty.json')}>
+                    Load Empty Collection
+                    </button>
+                    <button onClick={(e) => this.callbackLoadCollection('https://iiif.manducus.net/collections/random/autumn.json')}>
+                    Load Autumn Collection
+                    </button>
+                    <button onClick={(e) => this.callbackLoadCollection('https://iiif.manducus.net/collections/random/halloween2019.json')}>
+                    Load Halloween Collection
+                    </button>
                     <InputCollection loadCallback={this.callbackLoadCollection} />
                     <InputManifest addCallback={this.callbackAddItem} />
                 </div>

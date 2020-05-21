@@ -15,7 +15,7 @@ class App extends Component {
     constructor(props) {
         super(props)
         const state = store.getState()
-        this.callbackLoadCollection('https://iiif.manducus.net/collections/random/autumn.json')
+        this.callbackLoadCollection('https://iiif.manducus.net/collections/random/summer2020.json')
         this.rebuildCollectionV2 = this.rebuildCollectionV2.bind(this)
         this.rebuildCollectionV2(state.items)
     }
@@ -42,10 +42,15 @@ class App extends Component {
                 } else {
                     var label = uri;
                 }
+                if('thumbnail' in data['sequences'][0]['canvases'][0]) {
+                    var thumbnail = data['sequences'][0]['canvases'][0]['thumbnail'];
+                } else {
+                    var thumbnail = data['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['@id']+'/full/200,/0/default.jpg';
+                }
                 store.dispatch({type: 'ENRICH_VIEW',
                     uri: uri,
                     label: label,
-                    thumb: data['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['@id']+'/full/200,/0/default.jpg'
+                    thumb: thumbnail
                 })
                 this.rebuildCollectionV2(state.items)
             })

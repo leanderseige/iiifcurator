@@ -33,9 +33,18 @@ class App extends Component {
             .then(res => res.json())
             .then((data) => {
                 const state = store.getState()
+                if('label' in data) {
+                    if(typeof data.label == 'string') {
+                        var label = data.label;
+                    } else {
+                        var label = data.label['@value'];
+                    }
+                } else {
+                    var label = uri;
+                }
                 store.dispatch({type: 'ENRICH_VIEW',
                     uri: uri,
-                    label: data.label,
+                    label: label,
                     thumb: data['sequences'][0]['canvases'][0]['images'][0]['resource']['service']['@id']+'/full/200,/0/default.jpg'
                 })
                 this.rebuildCollectionV2(state.items)

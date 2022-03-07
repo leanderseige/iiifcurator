@@ -87,14 +87,17 @@ class App extends Component {
         // this.forceUpdate()
     }
 
-    callbackAddItem = (uri) => {
+    callbackAddItem = (uriin) => {
         const state = store.getState()
-        if(state.items.includes(uri)) {
-            alert("already there")
-            return
+        let uriarray = uriin.split(/[\s]+/)
+        for(let uri of uriarray) {
+          if(state.items.includes(uri)) {
+              alert("already there")
+              return
+          }
+          store.dispatch({type: 'ADD_MANIFEST', uri: uri })
+          this.enrich_view(uri)
         }
-        store.dispatch({type: 'ADD_MANIFEST', uri: uri })
-        this.enrich_view(uri)
         this.rebuildCollectionV2(state.items)
     }
 
